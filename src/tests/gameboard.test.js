@@ -6,6 +6,7 @@ describe('Gameboard Functions', () => {
     //Create test gameboard and ship
     let testGameboard = Gameboard();
     let testShip = Ship(4, "battleship");
+    let testShip2 = Ship(2, "Destroyer");
 
     test('Check Inavlid Coordinates', () => {
         expect(testGameboard.placeShip(testShip, [9, 9], false)).toBe(false);
@@ -21,6 +22,10 @@ describe('Gameboard Functions', () => {
             "3,9, battleship",
             "4,9, battleship",
         ]);
+    })
+
+    test('Check coordinates that are taken', () => {
+        expect(testGameboard.placeShip(testShip2, [3, 9], false)).toBe(false);
     })
 
     test('Recieve attack that misses', () => {
@@ -45,7 +50,6 @@ describe('Gameboard Functions', () => {
     })
 
     test('Check that all ships have sunk', () => {
-        let testShip2 = Ship(2, "Destroyer");
         testGameboard.placeShip(testShip2, [2, 5], false);
         //Sink all ships
         testGameboard.recieveAttack([3, 9]);

@@ -1,22 +1,49 @@
 let gameboardMax = 10;
 let gameboardMin = 1;
 
+let getPositions = (array) => array.map(e => (e.position).toString());
+
+function checkArray(array1, array2) {
+    let status = true;
+    array2.forEach(element => {
+        if (array1.indexOf(element) > -1) {
+            status = false;
+        }
+    });
+    return status;
+}
+
 //Check if placement is possible
-function isPlacementPossible(ship, coordinates, isVertical) {
+function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
     if (isVertical) {
+        //Check if coordinates in gameboard range
         if (
             coordinates[0] + (ship.length - 1) > gameboardMax ||
             coordinates[0] + (ship.length - 1) < gameboardMin
         ) return false;
-        return true;
+
+        //Check if possible coordinates are already filled
+        let coordinatesArray = [];
+        for (let i = 0; i < ship.length; i++) {
+            coordinatesArray.push(`[${coordinates[0] + i}, ${coordinates[1]}]`);
+        }
+        return checkArray(gameboard, coordinatesArray);
     }
+    //Check if coordinates in gameboard range
     if (
         coordinates[1] + (ship.length - 1) > gameboardMax ||
         coordinates[1] + (ship.length - 1) < gameboardMin
     ) return false;
-    return true;
 
+    //Check if possible coordinates are already filled
+    let coordinatesArray = [];
+    for (let i = 0; i < ship.length; i++) {
+        coordinatesArray.push([coordinates[0], (coordinates[1] + i)].toString());
+    }
+    return checkArray(gameboard, coordinatesArray);
+    // return checkArray(gameboard, coordinatesArray);
 }
+//chaneg thsi function to check if position is already taken
 
 //Create a ship object 
 function shipObject(ship, coordinates) {
@@ -33,7 +60,8 @@ let Gameboard = () => {
         missedShots,
 
         placeShip(ship, coordinates, isVertical) {
-            if (isPlacementPossible(ship, coordinates, isVertical) === false) return false;
+            let gameboardPositions = getPositions(this.gameboard);
+            if (isPlacementPossible(ship, coordinates, isVertical, gameboardPositions) === false) return false;
 
             if (isVertical) {
                 for (let i = 0; i < ship.length; i++) {
@@ -79,7 +107,7 @@ let Gameboard = () => {
                 if (accumlator.find(arrItem => arrItem.name === object.ship.name)) {
                     object.times++;
                 }
-                else{
+                else {
                     object.times = 1;
                     accumlator.push(object.ship);
                 }
