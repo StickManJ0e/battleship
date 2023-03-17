@@ -1,7 +1,12 @@
 console.log('working');
+import GameInitialiser from './initialiseGame';
+import Player from './factories/player';
+import Ship from './factories/shipFactory';
+import Gameboard from './factories/shipFactory'
 
-function foo() {
-    return 'hi';
-}
+let body = document.querySelector('body');
+let initialiseGame = GameInitialiser();
+initialiseGame.createStartGameMenu(body);
 
-export default foo;
+let player = Player("player1");
+initialiseGame.createShips(player);

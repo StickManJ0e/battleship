@@ -5,7 +5,7 @@ import Ship from '../factories/shipFactory'
 describe('Gameboard Functions', () => {
     //Create test gameboard and ship
     let testGameboard = Gameboard();
-    let testShip = Ship(4, "battleship");
+    let testShip = Ship(4, "Battleship");
     let testShip2 = Ship(2, "Destroyer");
 
     test('Check Inavlid Coordinates', () => {
@@ -17,10 +17,10 @@ describe('Gameboard Functions', () => {
         //Place testShip on testBoard
         testGameboard.placeShip(testShip, [1, 9], true);
         expect(testGameboard.gameboard.map(item => `${item.position}, ${item.ship.name}`)).toEqual([
-            "1,9, battleship",
-            "2,9, battleship",
-            "3,9, battleship",
-            "4,9, battleship",
+            "1,9, Battleship",
+            "2,9, Battleship",
+            "3,9, Battleship",
+            "4,9, Battleship",
         ]);
     })
 

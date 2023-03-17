@@ -2,7 +2,6 @@ import Ship from '../factories/shipFactory'
 
 describe('Ship Functions', () => {
     let testShip = Ship(6, "carrier");
-    // testShip.hits = [[1, 2], [3, 5], [5, 2]];
     
     test('Corrects ship length', () => {
         expect(testShip.length).toBe(5);
