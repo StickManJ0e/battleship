@@ -25,7 +25,7 @@ function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
         //Check if possible coordinates are already filled
         let coordinatesArray = [];
         for (let i = 0; i < ship.length; i++) {
-            coordinatesArray.push(`[${coordinates[0]}, ${coordinates[1] + i}]`);
+            coordinatesArray.push([coordinates[0], coordinates[1] + i].toString());
         }
         return checkArray(gameboard, coordinatesArray);
     }
@@ -65,7 +65,7 @@ let Gameboard = () => {
 
             if (isVertical) {
                 for (let i = 0; i < ship.length; i++) {
-                    let currentCordinates = [(coordinates[0]), coordinates[1] + i];
+                    let currentCordinates = [coordinates[0], coordinates[1] + i];
                     let object = new shipObject(ship, currentCordinates);
                     this.gameboard.push(object);
                 }
@@ -116,6 +116,16 @@ let Gameboard = () => {
 
             let shipsSunkStatus = newArray.every(e => e.isSunk() === true);
             return shipsSunkStatus;
+        },
+
+        //Indicates ship locations on board
+        updateShipPlacement(gameboard = this.gameboard) {
+            if (gameboard.length == 0) return;
+            (gameboard).forEach((element) => {
+                let coordinates = element.position;
+                let tiles = document.querySelector(`[data-value="${coordinates[0]},${coordinates[1]}"]`)
+                tiles.classList.add('selected');
+            })
         }
     };
 }

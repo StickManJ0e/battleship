@@ -33,6 +33,10 @@ body {
     background-color: red;
 }
 
+.gameboard-tile.selected {
+    background-color: grey;
+}
+
 .start-menu-div {
     display: flex;
     flex-direction: column;
