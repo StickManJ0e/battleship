@@ -69,9 +69,11 @@ let GameInitialiser = () => {
             player.ships.push(Ship(2, 'Destroyer'));
         },
 
-        enableShipPlacing(player) {
+        enableShipPlacing(player, shipQueue = [], queueNumber = 0) {
             let currentShipText = document.querySelector('.place-current');
             let gameboardTiles = document.querySelectorAll('.gameboard-tile');
+            let placeShipGameboard = document.querySelector('#place-ship-gameboard')
+            let startMenuDiv = document.querySelector('.start-menu-div')
             let rotateButton = document.querySelector('.rotate-button');
             let isVertical = false;
 
@@ -80,14 +82,12 @@ let GameInitialiser = () => {
                 isVertical = (isVertical == false) ? true : false;
             })
 
-            let shipQueue = [];
-            let queueNumber = 0;
-            shipQueue.push(player.ships[queueNumber]);
-            while (shipQueue.length && queueNumber < 5) {
-                let currentShip = shipQueue.shift();
+            shipQueue.push(player.ships[0]);
+            while (shipQueue.length > 0 && queueNumber < 5) {
+                shipQueue.shift();
+                let currentShip = player.ships[queueNumber];
                 //Queue from player ships to place each ship and change DOM elements
                 currentShipText.textContent = currentShip.name;
-
                 gameboardTiles.forEach((tile) => {
                     //Get coordinate of each gameboard tile from hovering
                     tile.addEventListener('mouseover', () => {
@@ -96,14 +96,32 @@ let GameInitialiser = () => {
 
                         tileHover(isVertical, currentCordinates, currentShip, 'add');
                     })
+
                     tile.addEventListener('mouseout', () => {
                         let coordinate = tile.getAttribute('data-value');
                         let currentCordinates = coordinate.split(',');
 
                         tileHover(isVertical, currentCordinates, currentShip, 'remove');
                     })
-                })
-            }
+
+                    tile.addEventListener('click', () => {
+                        let coordinate = tile.getAttribute('data-value');
+                        let currentCordinates = coordinate.split(',');
+                        let xValue = parseInt(currentCordinates[0]);
+                        let yValue = parseInt(currentCordinates[1]);
+                        currentCordinates = [xValue, yValue];
+                        if (player.gameboard.placeShip(currentShip, currentCordinates, isVertical) == true) {
+                            queueNumber += 1;
+                            shipQueue.push(player.ships[queueNumber]);
+                            //Recreate gameboard to remove past event listeners
+                            placeShipGameboard.remove();
+                            appendGameBoardDivs('place-ship-gameboard', startMenuDiv);
+                            this.enableShipPlacing(player, shipQueue, queueNumber);
+                        };
+                    });
+                });
+            };
+            if (queueNumber === 5) console.log(true);
         }
     }
 }

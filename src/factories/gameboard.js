@@ -18,27 +18,27 @@ function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
     if (isVertical) {
         //Check if coordinates in gameboard range
         if (
-            coordinates[0] + (ship.length - 1) > gameboardMax ||
-            coordinates[0] + (ship.length - 1) < gameboardMin
+            coordinates[1] + (ship.length - 1) > gameboardMax ||
+            coordinates[1] + (ship.length - 1) < gameboardMin
         ) return false;
 
         //Check if possible coordinates are already filled
         let coordinatesArray = [];
         for (let i = 0; i < ship.length; i++) {
-            coordinatesArray.push(`[${coordinates[0] + i}, ${coordinates[1]}]`);
+            coordinatesArray.push(`[${coordinates[0]}, ${coordinates[1] + i}]`);
         }
         return checkArray(gameboard, coordinatesArray);
     }
     //Check if coordinates in gameboard range
     if (
-        coordinates[1] + (ship.length - 1) > gameboardMax ||
-        coordinates[1] + (ship.length - 1) < gameboardMin
+        coordinates[0] + (ship.length - 1) > gameboardMax ||
+        coordinates[0] + (ship.length - 1) < gameboardMin
     ) return false;
 
     //Check if possible coordinates are already filled
     let coordinatesArray = [];
     for (let i = 0; i < ship.length; i++) {
-        coordinatesArray.push([coordinates[0], (coordinates[1] + i)].toString());
+        coordinatesArray.push([coordinates[0] + i, (coordinates[1])].toString());
     }
     return checkArray(gameboard, coordinatesArray);
     // return checkArray(gameboard, coordinatesArray);
@@ -65,7 +65,7 @@ let Gameboard = () => {
 
             if (isVertical) {
                 for (let i = 0; i < ship.length; i++) {
-                    let currentCordinates = [(coordinates[0] + i), coordinates[1]];
+                    let currentCordinates = [(coordinates[0]), coordinates[1] + i];
                     let object = new shipObject(ship, currentCordinates);
                     this.gameboard.push(object);
                 }
@@ -73,7 +73,7 @@ let Gameboard = () => {
             }
 
             for (let i = 0; i < ship.length; i++) {
-                let currentCordinates = [coordinates[0], (coordinates[1] + i)];
+                let currentCordinates = [coordinates[0] + i, (coordinates[1])];
                 let object = new shipObject(ship, currentCordinates);
                 this.gameboard.push(object);
             }
