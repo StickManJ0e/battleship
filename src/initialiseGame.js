@@ -30,6 +30,25 @@ function createElementWithClassText(className, element, appendLocation, text) {
     return div;
 };
 
+function tileHover(isVertical, coordinates, currentShip, addOrRemoveClass) {
+    let xValue = parseInt(coordinates[0]);
+    let yValue = parseInt(coordinates[1]);
+    if (isVertical == false) {
+        let length = ((xValue + (currentShip.length - 1)) >= gameboardMax) ? 11 - xValue : currentShip.length;
+        for (let i = 0; i < length; i++) {
+            //Add hover class for adjacent tiles based on ship length
+            let adjacentTile = document.querySelector(`[data-value="${xValue + i},${yValue}"]`);
+            if (addOrRemoveClass === 'add') {
+                adjacentTile.classList.add('hover');
+            }
+
+            else if (addOrRemoveClass === 'remove') {
+                adjacentTile.classList.remove('hover');
+            };
+        };
+    };
+};
+
 let GameInitialiser = () => {
     return {
         createStartGameMenu(appendLocation) {
@@ -50,21 +69,6 @@ let GameInitialiser = () => {
             player.ships.push(Ship(2, 'Destroyer'));
         },
 
-        tileHover(isVertical, coordinates, currentShip, addOrRemoveClass) {
-            if (isVertical == false) {
-                for (let i = 0; i < currentShip.length; i++) {
-                    let data = `${parseInt(coordinates[0]) + i},${parseInt(coordinates[1])}`;
-                    let adjacentTile = document.querySelector(`[data-value="${data}"]`);
-                    if (addOrRemoveClass === 'add') {
-                        adjacentTile.classList.add('hover');
-                    }
-                    else if (addOrRemoveClass === 'remove') {
-                        adjacentTile.classList.remove('hover');
-                    }
-                }
-            }
-        },
-
         enableShipPlacing(player) {
             let currentShipText = document.querySelector('.place-current');
             let gameboardTiles = document.querySelectorAll('.gameboard-tile');
@@ -76,10 +80,12 @@ let GameInitialiser = () => {
                 isVertical = (isVertical == false) ? true : false;
             })
 
-            let shipQueue = player.ships;
-            while (shipQueue.length) {
-                //Queue from player ships to place each ship and change DOM elements
+            let shipQueue = [];
+            let queueNumber = 0;
+            shipQueue.push(player.ships[queueNumber]);
+            while (shipQueue.length && queueNumber < 5) {
                 let currentShip = shipQueue.shift();
+                //Queue from player ships to place each ship and change DOM elements
                 currentShipText.textContent = currentShip.name;
 
                 gameboardTiles.forEach((tile) => {
@@ -88,13 +94,13 @@ let GameInitialiser = () => {
                         let coordinate = tile.getAttribute('data-value');
                         let currentCordinates = coordinate.split(',');
 
-                        this.tileHover(isVertical, currentCordinates, currentShip, 'add');
+                        tileHover(isVertical, currentCordinates, currentShip, 'add');
                     })
                     tile.addEventListener('mouseout', () => {
                         let coordinate = tile.getAttribute('data-value');
                         let currentCordinates = coordinate.split(',');
 
-                        this.tileHover(isVertical, currentCordinates, currentShip, 'remove');
+                        tileHover(isVertical, currentCordinates, currentShip, 'remove');
                     })
                 })
             }
