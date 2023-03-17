@@ -10,3 +10,4 @@ initialiseGame.createStartGameMenu(body);
 
 let player = Player("player1");
 initialiseGame.createShips(player);
+initialiseGame.enableShipPlacing(player);

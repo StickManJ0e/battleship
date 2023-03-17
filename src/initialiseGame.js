@@ -28,8 +28,7 @@ function createElementWithClassText(className, element, appendLocation, text) {
     div.textContent = text;
     appendLocation.appendChild(div);
     return div;
-}
-
+};
 
 let GameInitialiser = () => {
     return {
@@ -39,7 +38,7 @@ let GameInitialiser = () => {
             let placeTextDiv = createElementWithClassText('place-text', 'div', startMenuDiv);
             let placeTextP = createElementWithClassText('place-text-p', 'p', placeTextDiv, 'Place your');
             let placeTextShip = createElementWithClassText('place-current', 'p', placeTextDiv);
-            let rotateButton = createElementWithClassText('roatet-button', 'button', startMenuDiv, 'Rotate');
+            let rotateButton = createElementWithClassText('rotate-button', 'button', startMenuDiv, 'Rotate');
             let gameboard = appendGameBoardDivs('place-ship-gameboard', startMenuDiv);
         },
 
@@ -49,11 +48,56 @@ let GameInitialiser = () => {
             player.ships.push(Ship(3, 'Cruiser'));
             player.ships.push(Ship(3, 'Carrier'));
             player.ships.push(Ship(2, 'Destroyer'));
-            return;
         },
 
-        enableShipPlacing() {
-            let currentShipText = document.querySelector('place-current');
+        tileHover(isVertical, coordinates, currentShip, addOrRemoveClass) {
+            if (isVertical == false) {
+                for (let i = 0; i < currentShip.length; i++) {
+                    let data = `${parseInt(coordinates[0]) + i},${parseInt(coordinates[1])}`;
+                    let adjacentTile = document.querySelector(`[data-value="${data}"]`);
+                    if (addOrRemoveClass === 'add') {
+                        adjacentTile.classList.add('hover');
+                    }
+                    else if (addOrRemoveClass === 'remove') {
+                        adjacentTile.classList.remove('hover');
+                    }
+                }
+            }
+        },
+
+        enableShipPlacing(player) {
+            let currentShipText = document.querySelector('.place-current');
+            let gameboardTiles = document.querySelectorAll('.gameboard-tile');
+            let rotateButton = document.querySelector('.rotate-button');
+            let isVertical = false;
+
+            //Change orientation of ship on click
+            rotateButton.addEventListener('click', () => {
+                isVertical = (isVertical == false) ? true : false;
+            })
+
+            let shipQueue = player.ships;
+            while (shipQueue.length) {
+                //Queue from player ships to place each ship and change DOM elements
+                let currentShip = shipQueue.shift();
+                currentShipText.textContent = currentShip.name;
+
+                gameboardTiles.forEach((tile) => {
+                    //Get coordinate of each gameboard tile from hovering
+                    tile.addEventListener('mouseover', () => {
+                        let coordinate = tile.getAttribute('data-value');
+                        let currentCordinates = coordinate.split(',');
+
+                        this.tileHover(isVertical, currentCordinates, currentShip, 'add');
+                    })
+                    tile.addEventListener('mouseout', () => {
+                        let coordinate = tile.getAttribute('data-value');
+                        let currentCordinates = coordinate.split(',');
+
+                        this.tileHover(isVertical, currentCordinates, currentShip, 'remove');
+                    })
+                })
+            }
         }
     }
 }

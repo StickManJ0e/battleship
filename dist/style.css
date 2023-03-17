@@ -28,7 +28,8 @@ body {
     border: 1.5px black solid;
 }
 
-.gameboard-tile:hover {
+.gameboard-tile:hover,
+.gameboard-tile.hover {
     background-color: red;
 }
 
