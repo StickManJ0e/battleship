@@ -30,12 +30,12 @@ function createElementWithClassText(className, element, appendLocation, text) {
     return div;
 };
 
-function tileHover(isVertical, xValue, yValue, currentShip, addOrRemoveClass) {
+function tileHover(isVertical, xValue, yValue, currentShip, addOrRemoveClass, boardTag) {
     if (isVertical == false) {
         let length = ((xValue + (currentShip.length - 1)) > gameboardMax) ? 11 - xValue : currentShip.length;
         for (let i = 0; i < length; i++) {
             //Add hover class for adjacent tiles based on ship length
-            let adjacentTile = document.querySelector(`[data-value="${xValue + i},${yValue}"]`);
+            let adjacentTile = document.querySelector(`${boardTag} > [data-value="${xValue + i},${yValue}"]`);
             if (addOrRemoveClass === 'add') {
                 adjacentTile.classList.add('hover');
             }
@@ -67,6 +67,8 @@ let GameInitialiser = () => {
     return {
         gameStart,
         createStartGameMenu(appendLocation) {
+            let body = document.querySelector('body');
+            body.classList.add('blur-page');
             let startMenuDiv = createElementWithClassText('start-menu-div', 'div', appendLocation);
             let welcomeText = createElementWithClassText('welcome-text', 'div', startMenuDiv, 'Welcome to Battleships');
             let placeTextDiv = createElementWithClassText('place-text', 'div', startMenuDiv);
@@ -76,21 +78,26 @@ let GameInitialiser = () => {
             let gameboard = appendGameBoardDivs('place-ship-gameboard', startMenuDiv);
         },
 
+        createPlayerGameboard(appendLocation, idName) {
+            let gameboard = appendGameBoardDivs(idName, appendLocation);
+            return gameboard;
+        },
+
         createShips(player) {
             player.ships.push(Ship(5, 'Carrier'));
             player.ships.push(Ship(4, 'Battleship'));
             player.ships.push(Ship(3, 'Cruiser'));
-            player.ships.push(Ship(3, 'Carrier'));
+            player.ships.push(Ship(3, 'Submarine'));
             player.ships.push(Ship(2, 'Destroyer'));
         },
 
         enableShipPlacing(player, shipQueue = [], queueNumber = 0, isVertical = false) {
             let currentShipText = document.querySelector('.place-current');
-            let gameboardTiles = document.querySelectorAll('.gameboard-tile');
+            let gameboardTiles = document.querySelectorAll('#place-ship-gameboard > .gameboard-tile');
             let placeShipGameboard = document.querySelector('#place-ship-gameboard')
             let startMenuDiv = document.querySelector('.start-menu-div')
             let rotateButton = document.querySelector('.rotate-button');
-            player.gameboard.updateShipPlacement();
+            player.gameboard.updateShipPlacement('#place-ship-gameboard');
 
             //Change orientation of ship on click
             rotateButton.addEventListener('click', () => {
@@ -115,12 +122,12 @@ let GameInitialiser = () => {
 
                     //Add class to adjacent coordinates on hover
                     tile.addEventListener('mouseover', () => {
-                        tileHover(isVertical, xValue, yValue, currentShip, 'add');
+                        tileHover(isVertical, xValue, yValue, currentShip, 'add', '#place-ship-gameboard');
                     })
 
                     //Remove class to adjacent coordinates on hover
                     tile.addEventListener('mouseout', () => {
-                        tileHover(isVertical, xValue, yValue, currentShip, 'remove');
+                        tileHover(isVertical, xValue, yValue, currentShip, 'remove', '#place-ship-gameboard');
                     })
 
                     tile.addEventListener('click', () => {
@@ -141,9 +148,10 @@ let GameInitialiser = () => {
             if (queueNumber === 5) this.gameStart = true;
         },
 
-        startGame() {
+        startGame(body) {
             let startMenuDiv = document.querySelector('.start-menu-div');
             startMenuDiv.remove();
+            body.classList.remove("blur-page")
         }
     }
 }

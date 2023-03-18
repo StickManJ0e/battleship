@@ -119,12 +119,29 @@ let Gameboard = () => {
         },
 
         //Indicates ship locations on board
-        updateShipPlacement(gameboard = this.gameboard) {
+        updateShipPlacement(gameboardTag, gameboard = this.gameboard) {
             if (gameboard.length == 0) return;
             (gameboard).forEach((element) => {
                 let coordinates = element.position;
-                let tiles = document.querySelector(`[data-value="${coordinates[0]},${coordinates[1]}"]`)
+                let tiles = document.querySelector(`${gameboardTag} > [data-value="${coordinates[0]},${coordinates[1]}"]`)
                 tiles.classList.add('selected');
+            });
+        },
+
+        updateMissed(gameboardTag, missedShotsArray = this.missedShots) {
+            missedShotsArray.forEach((element) => {
+                let tiles = document.querySelector(`${gameboardTag} > [data-value="${element[0]},${element[1]}"]`);
+                tiles.classList.add('missed');
+            });
+        },
+
+        updateHit(gameboardTag, player) {
+            (player.ships).forEach((ship) => {
+                let coordinates = ship.hits;
+                coordinates.forEach((position) => {
+                    let tiles = document.querySelector(`${gameboardTag} > [data-value="${position[0]},${position[1]}"]`);
+                    tiles.classList.add('hit');
+                })
             })
         }
     };
