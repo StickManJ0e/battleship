@@ -86,11 +86,11 @@ let Gameboard = () => {
 
             if (gameboardIndex === -1) {
                 this.recieveMissedHit(coordinates);
-                return;
+                return false;
             }
 
             gameboard[gameboardIndex].ship.hit(coordinates);
-            return gameboard[gameboardIndex].ship.hits;
+            return true;
         },
 
         recieveMissedHit(coordinates) {

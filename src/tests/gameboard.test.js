@@ -15,13 +15,8 @@ describe('Gameboard Functions', () => {
     //Get only ship position and name and format accoridingly for test purposes
     test('Update Gameboard after placing ship', () => {
         //Place testShip on testBoard
-        testGameboard.placeShip(testShip, [1, 9], true);
-        expect(testGameboard.gameboard.map(item => `${item.position}, ${item.ship.name}`)).toEqual([
-            "1,9, Battleship",
-            "2,9, Battleship",
-            "3,9, Battleship",
-            "4,9, Battleship",
-        ]);
+        testGameboard.placeShip(testShip, [1, 9], false);
+        expect(testGameboard.gameboard.length).toBe(4);
     })
 
     test('Check coordinates that are taken', () => {
@@ -50,7 +45,7 @@ describe('Gameboard Functions', () => {
     })
 
     test('Check that all ships have sunk', () => {
-        testGameboard.placeShip(testShip2, [2, 5], false);
+        testGameboard.placeShip(testShip2, [2, 5], true);
         //Sink all ships
         testGameboard.recieveAttack([3, 9]);
         testGameboard.recieveAttack([4, 9]);

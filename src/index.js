@@ -36,7 +36,7 @@ async function waitStart() {
     //Start Game Loop
     initialiseGame.startGame(body);
     player.gameboard.updateShipPlacement('#player1-gameboard');
-    aiPlayer.enableAttacking();
+    aiPlayer.startAiGame(player);
 }
 
 waitStart()

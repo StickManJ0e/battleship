@@ -152,6 +152,19 @@ let GameInitialiser = () => {
             let startMenuDiv = document.querySelector('.start-menu-div');
             startMenuDiv.remove();
             body.classList.remove("blur-page")
+        },
+
+        declareWinner(winner) {
+            let body = document.querySelector('body');
+            body.classList.add('blur-page');
+            let gameEndDiv = createElementWithClassText('game-end-div', 'div', body);
+            let gameEndTextDiv = createElementWithClassText('game-end-text-div', 'div', gameEndDiv);
+            let text = (winner === 'player1') ? 'You Win!' : 'You Lose';
+            let gameEndText = createElementWithClassText('game-end-text', 'div', gameEndTextDiv, text);
+            let resetButton = createElementWithClassText('reset-button', 'button', gameEndDiv, 'reset');
+            resetButton.addEventListener('click', () => {
+                window.location.reload();
+            });
         }
     }
 }
