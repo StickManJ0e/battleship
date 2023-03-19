@@ -1,5 +1,8 @@
 :root {
     --background-color: rgb(221, 221, 221);
+    --red: rgb(255, 133, 133);
+    --green: rgb(131, 155, 151);
+    --green-border: rgb(57, 59, 68);
 }
 
 body,
@@ -51,6 +54,7 @@ body {
     grid-template: repeat(10, 1fr) / repeat(10, 1fr);
     width: 300px;
     height: 300px;
+    gap: 2.5px;
 }
 
 .gameboard-tile {
@@ -62,7 +66,7 @@ body {
 #place-ship-gameboard>.gameboard-tile:hover,
 .gameboard-tile.hover,
 #player2-gameboard>.gameboard-tile:hover {
-    background-color: red;
+    background-color: var(--red);
 }
 
 #place-ship-gameboard>.gameboard-tile.selected,
@@ -115,10 +119,48 @@ body {
 }
 
 .missed {
-    background-color: red;
+    background-color: var(--green);
+    position: relative;
+}
+
+.missed::after,
+.hit::after {
+    position: absolute;
+    font-weight: 900;
+    font-size: 15px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.missed::after {
+    content: "•";
 }
 
 #player1-gameboard>.gameboard-tile.hit,
 .hit {
-    background-color: green;
+    background-color: var(--red);
+    position: relative;
+}
+
+.hit::after {
+    content: "x";
+}
+
+a {
+    color: initial;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 750px) {
+    body {
+        flex-direction: column;
+        justify-content: center;
+        gap: 2rem;
+    }
+
+    .gameboard-div {
+        width: 250px;
+        height: 250px;
+    }
 }

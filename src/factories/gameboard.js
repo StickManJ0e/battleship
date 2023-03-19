@@ -6,15 +6,38 @@ let getPositions = (array) => array.map(e => (e.position).toString());
 function checkArray(array1, array2) {
     let status = true;
     array2.forEach(element => {
-        if (array1.indexOf(element) > -1) {
+        if (array1.indexOf(element.toString()) > -1) {
             status = false;
         }
     });
     return status;
 }
 
+function checkAdjacent(gameboard, coordinates) {
+    let status = true;
+    coordinates.forEach((coordinate) => {
+        for (let i = -1; i < 2; i += 2) {
+            let adjacentCoordinates = [coordinate[0] + i, coordinate[1]];
+            console.log(adjacentCoordinates);
+            if (gameboard.indexOf(adjacentCoordinates.toString()) > -1) {
+                status = false;
+            }
+        };
+
+        for (let i = -1; i < 2; i += 2) {
+            let adjacentCoordinates = [coordinate[0], coordinate[1] + i];
+            if (gameboard.indexOf(adjacentCoordinates.toString()) > -1) {
+                status = false;
+            }
+        };
+    })
+
+    return status;
+}
+
 //Check if placement is possible
 function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
+
     if (isVertical) {
         //Check if coordinates in gameboard range
         if (
@@ -25,8 +48,9 @@ function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
         //Check if possible coordinates are already filled
         let coordinatesArray = [];
         for (let i = 0; i < ship.length; i++) {
-            coordinatesArray.push([coordinates[0], coordinates[1] + i].toString());
+            coordinatesArray.push([coordinates[0], coordinates[1] + i]);
         }
+        if (checkAdjacent(gameboard, coordinatesArray) == false) return false;
         return checkArray(gameboard, coordinatesArray);
     }
     //Check if coordinates in gameboard range
@@ -37,9 +61,11 @@ function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
 
     //Check if possible coordinates are already filled
     let coordinatesArray = [];
+
     for (let i = 0; i < ship.length; i++) {
-        coordinatesArray.push([coordinates[0] + i, (coordinates[1])].toString());
+        coordinatesArray.push([coordinates[0] + i, (coordinates[1])]);
     }
+    if (checkAdjacent(gameboard, coordinatesArray) == false) return false;
     return checkArray(gameboard, coordinatesArray);
     // return checkArray(gameboard, coordinatesArray);
 }
