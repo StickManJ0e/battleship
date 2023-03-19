@@ -1,8 +1,10 @@
 let gameboardMax = 10;
 let gameboardMin = 1;
 
+//Get poisitons of all ships and turn into string
 let getPositions = (array) => array.map(e => (e.position).toString());
 
+//Check if one array contains the other
 function checkArray(array1, array2) {
     let status = true;
     array2.forEach(element => {
@@ -13,12 +15,12 @@ function checkArray(array1, array2) {
     return status;
 }
 
+//Check if ship adjacent to every tile
 function checkAdjacent(gameboard, coordinates) {
     let status = true;
     coordinates.forEach((coordinate) => {
         for (let i = -1; i < 2; i += 2) {
             let adjacentCoordinates = [coordinate[0] + i, coordinate[1]];
-            console.log(adjacentCoordinates);
             if (gameboard.indexOf(adjacentCoordinates.toString()) > -1) {
                 status = false;
             }
@@ -67,9 +69,7 @@ function isPlacementPossible(ship, coordinates, isVertical, gameboard) {
     }
     if (checkAdjacent(gameboard, coordinatesArray) == false) return false;
     return checkArray(gameboard, coordinatesArray);
-    // return checkArray(gameboard, coordinatesArray);
 }
-//chaneg thsi function to check if position is already taken
 
 //Create a ship object 
 function shipObject(ship, coordinates) {

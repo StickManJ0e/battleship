@@ -96,8 +96,8 @@ body {
     position: absolute;
     z-index: 9;
     filter: brightness(1.1);
-    width: 400px;
-    height: 500px;
+    width: 350px;
+    height: 300px;
     justify-content: center;
     gap: 10px;
 }
@@ -150,6 +150,17 @@ body {
 a {
     color: initial;
     text-decoration: none;
+}
+
+.game-end-text {
+    font-size: 32px;
+    font-weight: 300;
+}
+
+.reset-button {
+    width: 5rem;
+    height: 2rem;
+    text-transform: uppercase;
 }
 
 @media screen and (max-width: 750px) {
