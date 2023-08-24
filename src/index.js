@@ -1,4 +1,3 @@
-console.log('working');
 import GameInitialiser from './initialiseGame';
 import Player from './factories/player';
 import Ship from './factories/shipFactory';
@@ -20,7 +19,6 @@ let initialiseGame = GameInitialiser();
 initialiseGame.createStartGameMenu(body);
 let player1DomGameboard = initialiseGame.createPlayerGameboard(body, 'player1-gameboard');
 let player2DomGameboard = initialiseGame.createPlayerGameboard(body, 'player2-gameboard');
-
 
 let player = Player("player1");
 let aiPlayer = AiPlayer();
